@@ -1,4 +1,11 @@
 from ..utils import Nameable, Taggable, Manager
+from copy import copy
+
+
+def populate_manager(m: Manager, obj_list: List[Any]) -> Manager:
+    for obj in obj_list:
+        m.add(obj)
+    return m
 
 
 def test_utils_Nameable():
@@ -63,10 +70,7 @@ def test_utils_Manager_init_add_objects():
 
 
 def test_utils_Manager_find_at_random():
-    m = Manager()
-    obj_list = ["string", 10, 10.1]
-    for obj in obj_list:
-        m.add(obj)
+    m = m = populate_manager(Manager(), ["string", 10, 10.1])
     
     assert m.random() in obj_list
 
@@ -78,3 +82,29 @@ def test_utils_Manager_find_at_random():
     assert m.at(-1) == None
 
     # falta find
+
+
+def test_utils_Manager_removes():
+    obj_list = ["string", 10, 10.1]
+    m = populate_manager(Manager(), obj_list)
+    m.remove_all()
+    assert m.objects == list()
+
+    m = populate_manager(Manager(), obj_list)
+    assert m.remove_at(4) == False and m.objects == obj_list
+    assert m.remove_at(-1) == False and m.objects == obj_list
+    f_list = obj_list.copy()
+    f_list.pop(0)
+    assert m.remove_at(0) == True and m.objects == f_list
+    assert m.remove_at(2) == False and m.objects == obj_list
+    assert m.remove_at(None) == False
+    assert m.remove_at() == False
+
+    m = populate_manager(Manager(), obj_list)
+    f_list = obj_list.copy()
+    f_list.pop(0)
+    assert m.remove("string") == True and and m.objects == f_list
+    assert m.remove("string") == False and m.objects == obj_list
+    assert m.remove() == False
+    assert m.remove(None) == False
+    
