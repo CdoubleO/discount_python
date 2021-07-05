@@ -43,6 +43,23 @@ def test_utils_Taggable():
     assert t.has_tag("tag4") == False
     
 
-def test_utils_Manager():
-    
+def test_utils_Manager_init_add_objects():
+    empty_list = list()
+    m = Manager()
+    assert m.objects() == empty_list
+    m = Manager(None)
+    assert m.objects() == empty_list
+    assert m.add() == False
+    assert m.add(None) == False
+    assert m.add("") == False
+    assert m.add("string") == True
+    assert m.add(10) == True
+    assert m.add(10.1) == True
+    assert m.add(bool()) == False
+    assert m.add(tuple()) == False
+    assert m.add(dict()) == False
+    assert m.add(list()) == False
+    assert m.objects() == ["string", 10, 10.1]
+
+
 
