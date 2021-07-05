@@ -62,4 +62,19 @@ def test_utils_Manager_init_add_objects():
     assert m.objects() == ["string", 10, 10.1]
 
 
+def test_utils_Manager_find_at_random():
+    m = Manager()
+    obj_list = ["string", 10, 10.1]
+    for obj in obj_list:
+        m.add(obj)
+    
+    assert m.random() in obj_list
 
+    for idx,obj in enumerate(obj_list):
+        assert m.at(idx) == obj
+    assert m.at() == None
+    assert m.at(None) == None
+    assert m.at(4) == None
+    assert m.at(-1) == None
+
+    # falta find
